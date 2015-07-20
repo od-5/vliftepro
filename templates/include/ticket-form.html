@@ -1,0 +1,5 @@
+<form class="form1" action="{% url 'ticket' %}" method='post'>{% csrf_token %}
+  {{ form.name }}<br>
+  {{ form.phone }}<br>
+  <input type="submit" name="" value="Отправить">
+</form>

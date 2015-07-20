@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="{{ SITE_SETTINGS.meta_desc|default:'' }}">
+  <meta name="keywords" content="{{ SITE_SETTINGS.meta_key|default:'' }}">
+  <title>{{ SITE_SETTINGS.title|default:'Дружба' }}{% if city %} | г.{{ city.name|default:'' }}{% endif %}</title>
+  <script src="{{ STATIC_URL }}js/jquery-1.11.2.min.js"></script>
+  <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/jquery.formset.min.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.bxslider.min.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.validate.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
+  <script src="{{ STATIC_URL }}js/user/map2.js"></script>
+  <script src="{{ STATIC_URL }}js/user/common.js"></script>
+
+  <link href="{{ STATIC_URL }}js/jquery.bxslider.css" rel="stylesheet" />
+  <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
+  {% if SITE_SETTING %}
+    {{ SITE_SETTINGS.top_js|safe }}
+  {% endif %}
+<script>
+$(function(){
+    // валидация форм
+    $.validator.messages.required = "* Заполните поле! *";
+{#    $(".frm-wrp1 form input[type='text']").addClass("required");#}
+{#    $(".form2-wrap form input[type='text']").addClass("required");#}
+{#    $(".form3-wrap form input[type='text']").addClass("required");#}
+    $(".content-10 form input.nm, .content-10 form input.tele").addClass("required");
+{#    $(".frm-wrp1 form").validate();#}
+    $(".content-10 form").validate();
+{#    $(".form2-wrap form").validate();#}
+{#    $(".form3-wrap form").validate();#}
+    // запускаем formset
+    $('.content-10 tr.lines').formset({
+        prefix: '{{ calc_formset.prefix }}',
+        addText: 'Добавить город',
+        deleteText: 'Удалить'
+    });
+    $('a.add-row').click(function(){
+        $('a.delete-row').show();
+    });
+    $('.col-2 input, .col-4 input, .col-5 input, .tbl-sum input[type=text]').attr('readonly', true);
+
+    var id;
+    var lift_id;
+    var price_id;
+    var sum_id;
+    var total_sum;
+    var id_constructor = function(i){
+        id = i.attr('id').split('-');
+        lift_id = id;
+        price_id = id;
+        sum_id = id;
+        lift_id[lift_id.length-1] = 'lift';
+        lift_id = '#' + lift_id.join('-');
+        price_id[price_id.length-1] = 'price';
+        price_id = '#' + price_id.join('-');
+        sum_id[sum_id.length-1] = 'sum';
+        sum_id = '#' + sum_id.join('-');
+    };
+    var apply_change = function(i){
+        if(i.val() != ''){
+            $(sum_id).val($(lift_id).val() * $(price_id).val());
+        } else {
+            $(sum_id).val('');
+        }
+    }
+    var total_sum_change = function(){
+        total_sum = 0;
+        $('.col-5 input').each(function(){
+            if($(this).val() != ''){
+                total_sum = total_sum + parseInt($(this).val());
+            }
+        });
+        if (total_sum == 0) {
+            total_sum = '';
+        }
+        $('.tbl-sum-col2').val(total_sum);
+    }
+    $('a.delete-row').click(function(){
+        total_sum_change();
+    });
+    // ajax city change
+    $('.col-1 select').change(function(){
+        id_constructor($(this));
+        if($(this).val() == ''){
+            $(id).val('');
+          console.log('empty');
+        } else {
+          console.log($(this).val());
+            $.get("/city", {
+                    name: $(this).val()
+                },
+                function(e){
+                    var data = e;
+                    console.log(data.lift);
+                    $(lift_id).val(data.lift);
+                    apply_change($(price_id));
+                    total_sum_change();
+                }
+            );
+        }
+    });
+    // ajax format change
+    $('.col-3 select').change(function(){
+        id_constructor($(this));
+        if($(this).val() == '---------'){
+            $(id).val('');
+        } else {
+            $.get("/format", {
+                    name: $(this).val()
+                },
+                function(e){
+{#                    var data = JSON.parse(e);#}
+                    $(price_id).val(e.price);
+                    apply_change($(lift_id));
+                    total_sum_change();
+                }
+            );
+        }
+    });
+
+
+    // Затемнение фона
+    $('.tbl-sum button').click(function(){
+        $('#retain_form').fadeIn();
+        var docHeight = $(document).height();
+        $("body").append("<div id='overlay'></div>");
+        $("#overlay")
+           .height(docHeight)
+           .css({
+              'opacity' : 0.4,
+              'position': 'fixed',
+              'top': 0,
+              'left': 0,
+              'background-color': 'black',
+              'width': '100%',
+              'z-index': 9
+           });
+    });
+
+    // Закрытие модального окна
+    $(document).mouseup(function (e) {
+        var container = $("#retain_form");
+        if (container.has(e.target).length === 0){
+        container.hide();
+        $('#overlay').remove();
+        }
+    });
+
+});
+</script>
+</head>
+<body data-city='{% if index %}Волгоград{% else %}{{ city }}{% endif %}'>
+<div id="wrapper">
+    <!-- content-1 -->
+    <div class="content-1">
+    {% if CITY_LIST %}
+      <div class="city_list">
+        <button>Выберите город</button>
+        <ul>
+          {% for item in CITY_LIST %}
+          <li><a href="/{{ item.slug }}/">{{ item.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+        <div class="line1-1">
+            <div class="logo1">
+                <a href="{% url 'home' %}"><h1>дружба</h1></a>
+                <p>рекламное агентство</p>
+            </div>
+
+            <div class="phn-no">
+                <h1>{{ SITE_SETTINGS.phone|default:'8 800 234 37 37' }}</h1>
+                <p>звоните с любого телефона РФ бесплатно</p>
+            </div>
+        </div>
+
+      {% if index %}
+        <div class="line1-2">
+            <p>захватите внимание руководителей!</p>
+        </div>
+
+        <div class="line1-3">
+            <h3><span class="spn1">от </span><span class="spn2">400 </span><span class="spn3">рублей </span><span class="spn4">в месяц</span></h3>
+            <h4><span class="spn5">реклама в лифтах</span><br><span class="spn6">бизнес-центров</span></h4>
+        </div>
+      {% else %}
+        <div class="line1-2-city">
+          {% if city %}
+            {% for article in city.article_set.all %}
+              <p>{{ article.text|truncatewords:100|linebreaksbr }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endif %}
+        <div class="line1-4">
+            <div class="frm-wrp1">
+                <h1><span class="spn7">бронируйте сейчас-<br>количество мест<br></span><span class="spn8">ограничено!</span></h1>
+                {% include 'include/ticket-form.html' %}
+            </div>
+        </div>
+
+    </div> <!-- end content-1 -->
+    <div class="line1-5">
+        <p>Пробовали разные рекламные носители и не видели отдачи?<br>Нужно выйти на платёжеспособную аудиторию?</p>
+    </div>
+        <!-- content-2 -->
+    <div class="content-2">
+        <h3>тогда вам нужна реклама...</h3>
+        <h2><span class="spn2-1">в лифтах </span><span class="spn2-2">бизнес-центров!</span></h2>
+
+        <div class="g1-holder">
+            <div class="itm">
+                <img src="{{ STATIC_URL }}images/itm-1.png" alt="">
+                <h1>Деловая аудитория</h1>
+                <p>Рекламу видят руководители  и владельцы бизнеса, а также сотрудники компаний.</p>
+            </div>
+            <div class="itm">
+                <img src="{{ STATIC_URL }}images/itm-2.png" alt="">
+                <h1>Большой охват</h1>
+                <p>Реклама размещается в крупных торговых и офисных центрах с большой проходимостью</p>
+            </div>
+            <div class="itm">
+                <img src="{{ STATIC_URL }}images/itm-3.png" alt="">
+                <h1>Заметно сразу!</h1>
+                <p>Замкнутое пространство в лифте и большой размер стенда на расстоянии вытянутой руки</p>
+            </div>
+            <div class="itm">
+                <img src="{{ STATIC_URL }}images/itm-4.png" alt="">
+                <h1>Вас запомнят</h1>
+                <p>Клиенты видят рекламу минимум 2 раза в день на протяжении месяца</p>
+            </div>
+            <div class="itm">
+                <img src="{{ STATIC_URL }}images/itm-5.png" alt="">
+                <h1>Гарантия показов</h1>
+                <p>Каждый день в лифтах ездят огромное количество народа - вашу рекламу увидят все!</p>
+            </div>
+            <div class="itm">
+                <img src="{{ STATIC_URL }}images/itm-6.png" alt="">
+                <h1>Полный фотоотчёт</h1>
+                <p>Вы можете быть уверены в том, что Ваша реклама размещена - мы предоставляем фото всех стендов.</p>
+            </div>
+        </div>
+
+    </div> <!-- end content-2 -->
+
+        <!-- content-3 -->
+  {% if slider_list %}
+    <div class="content-3">
+        <h1>примеры наших работ</h1>
+
+        <div class="slide-holder-1">
+            <ul class="bxslider slider-1">
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb1.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>БЦ "Меркурий"</p>#}
+{#                            <h2>г. Волгоград</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb2.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>БЦ "Технополис"</p>#}
+{#                            <h2>г. Казань</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb3.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>Универсальный бизнес-центр</p>#}
+{#                            <h2>г. Саратов</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb4.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>ТРЦ "Зелёное кольцо"</p>#}
+{#                            <h2>г. Волгоград</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb5.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>ТРЦ "Диамант" на Комсомольской</p>#}
+{#                            <h2>г. Волгоград</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb6.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>ТРК "ЕВРОПА СИТИ МОЛЛ"</p>#}
+{#                            <h2>г. Волгоград</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb7.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>Офисный центр ул. Балонина, 2А</p>#}
+{#                            <h2>г. Волгоград</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb8.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>Офисный центр пр. Ленина, 94 А</p>#}
+{#                            <h2>г. Волгоград</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <div class="img-wrap">#}
+{#                        <img src="{{ STATIC_URL }}images/slider/thumb9.jpg" alt="">#}
+{#                        <div class="sld-info">#}
+{#                            <p>БЦ «Колизей»</p>#}
+{#                            <h2>г. Ростов-на-Дону</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </li>#}
+
+              {% for slide in slider_list %}
+                <li>
+                    <div class="img-wrap">
+                        <img src="{{ slide.image_resize.url }}" alt="">
+                        <div class="sld-info">
+                            <p>{{ slide.name }}</p>
+                            <h2>г. {{ slide.city.name }}</h2>
+                        </div>
+                    </div>
+                </li>
+              {% endfor %}
+
+            </ul>
+        </div>
+    </div> <!-- end content-3 -->
+  {% endif %}
+        <!-- content-4 -->
+    <div class="content-4">
+        <h2>КАК МЫ РАБОТАЕМ?</h2>
+
+        <ul class="stps">
+            <li>
+                <h1>1 этап</h1>
+                <p>Вы звоните или  оставляете заявку</p>
+            </li>
+            <li>
+                <h1>2 этап</h1>
+                <p>Мы консультируем Вас по всем вопросам</p>
+            </li>
+            <li>
+                <h1>3 этап</h1>
+                <p>Вы вносите оплату  за размещение  Вашей рекламы</p>
+            </li>
+            <li>
+                <h1>4 этап</h1>
+                <p>Мы размещаем рекламу и передаём  Вам фото-отчет с каждого лифта</p>
+            </li>
+            <li>
+                <h1>5 этап</h1>
+                <p>Готово!  Вы начинаете  получать новых  клиентов по рекламе</p>
+            </li>
+        </ul>
+
+        <div class="form2-wrap">
+          {% include 'include/ticket-form.html' %}
+        </div>
+
+        <p class="rgt-now"><span class="spn4-1">Оставьте заявку</span><br><span class="spn4-2">прямо сейчас!</span></p>
+    </div> <!-- end content-4 -->
+
+        <!-- content-5 -->
+    <div class="content-5">
+        <h1><img src="{{ STATIC_URL }}images/ico-i.png" alt="">84% наших клиентов обращаются к нам повторно</h1>
+    </div> <!-- end content-5 -->
+
+        <!-- content-6 -->
+    <div class="content-6">
+        <h1>ТОЛЬКО У НАС ОНЛАЙН КОНТРОЛЬ<br>ПРОЦЕССА МОНТАЖА - 100% ГАРАНТИЯ</h1>
+        <img src="{{ STATIC_URL }}images/chrt1.png" alt="">
+        <div class="c6p-wrap">
+            <p>Рекламные носители нашей компании снабжены специальными штрих-кодами: на стенде - для определения адреса конструкции и на рекламном плакате - для определения тиража.</p><br>
+        <p>В целях контроля исполнения Вашего заказа, мы предоставляем вам, как клиенту, специальный доступ (с логином и
+паролем) к нашей программе в сети Интернет, с помощью которой Вы можете наблюдать за исполнением заказа в
+режиме онлайн. После сканирования штрих-кода, размещённого на стенде специальным электронным устройством,
+в программе фиксируется адрес, по которому произошла замена плаката и прилагается фотография стенда, которая
+так же в режиме онлайн отображается в программе в разделе "Фотоотчёт".</p><br>
+        <p>Мы делаем всё необходимое, чтобы обеспечить уверенность в работе, которую мы выполняем в интересах Вашего
+бизнеса. Теперь для того, чтобы убедиться в качестве произведённых работ, Вам не надо гадать размещена ли Ваша
+ реклама, ходить по лифтам и звонить знакомым.</p><br>
+        <p>Во всех городах нашего присутствия, мы - единственная рекламная компания, которая предоставляет такой
+современный и технологически совершенный метод мониторинга качества и полноты исполнения своих обязательств
+ перед нашими клиентами.</p><br>
+        <p>Выбирая нашу компанию, Вы можете быть на 100% уверены, что Ваш заказ будет исполнен качественно.</p>
+        </div>
+
+    </div> <!-- end content-6 -->
+
+        <!-- content-7 -->
+    <div class="content-7">
+        <div class="org-wrap">
+            <h1>С НАМИ УЖЕ РАБОТАЮТ</h1>
+        </div>
+
+        <div class="wht-wrap">
+            <div class="slide-holder-2">
+                <ul class="bxslider slider-2">
+                    <li>
+                        <img src="{{ STATIC_URL }}images/clients-1.png" alt="">
+                    </li>
+                    <li>
+                        <img src="{{ STATIC_URL }}images/clients-2.png" alt="">
+                    </li>
+                    <li>
+                        <img src="{{ STATIC_URL }}images/clients-3.png" alt="">
+                    </li>
+                    <li>
+                        <img src="{{ STATIC_URL }}images/clients-4.png" alt="">
+                    </li>
+                    <li>
+                        <img src="{{ STATIC_URL }}images/clients-5.png" alt="">
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="blk-wrap">
+            <h1>ГДЕ РАЗМЕЩАЕТСЯ РЕКЛАМА?<br>РАСПОЛОЖЕНИЕ БИЗНЕС-ЦЕНТРОВ</h1>
+        </div>
+    </div> <!-- end content-7 -->
+
+        <!-- content-8 -->
+    <div class="content-8">
+      {% if index %}
+        <div class="city-menu-wrap">
+            <ul>
+                {% if first_city %}
+                {% for item in first_city %}
+                <li class="ch">{{ item.name }}</li>
+                {% endfor %}
+                {% endif %}
+                {% if all_city %}
+                <li>все города
+                    <ul>
+                        {% for item in all_city %}
+                        <li class="ch">{{ item.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+      {% endif %}
+        <div id="YMapsID">
+
+        </div>
+        <!-- <img src="{{ STATIC_URL }}images/map.jpg" alt=""> -->
+    </div> <!-- end content-8 -->
+
+        <!-- content-9 -->
+    {% if index %}
+    <div class="content-9">
+        <h1>РасСчитайте стоимость вашей рекламы</h1>
+    </div> <!-- end content-9 -->
+
+        <!-- content-10 -->
+    <div class="content-10">
+        <div class="table-holder">
+        <form action="{% url 'calculator' %}" method="post">{% csrf_token %}
+            <table>
+                <tr>
+                    <td>Город</td>
+                    <td>Лифты</td>
+                    <td>Формат</td>
+                    <td>1 лифт</td>
+                    <td>Все лифты</td>
+                    <td></td>
+                </tr>
+                {% for item in calc_formset %}
+                <tr class="lines">
+                    <td class="col-1">
+                        {{ item.city }}
+                    </td>
+                    <td class="col-2">
+                        {{ item.lift }}
+                    </td>
+                    <td class="col-3">
+                        {{ item.format }}
+                    </td>
+                    <td class="col-4">
+                        {{ item.price }}
+                    </td>
+                    <td class="col-5">
+                        {{ item.sum }}
+                    </td>
+                    <td class="col-6">
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {{ calc_formset.management_form }}
+            <div id="retain_form">
+                  <div class="wrapper">
+                      <span class="title">ОТПРАВИТЬ</span>
+                      {{ form.name }}<br>
+                      {{ form.phone }}<br>
+                      <input type="submit" value="Отправить">
+                  </div>
+               </div>
+        </form>
+        </div>
+
+        <div class="tbl-sum">
+            <label for="Итого">Итого:</label>
+            <input class="tbl-sum-col2" type="text" name="" value="">
+            <button>СДЕЛАТЬ ЗАКАЗ</button>
+        </div>
+
+    </div> <!-- end content-10 -->
+    {% endif %}
+        <!-- content-11 -->
+    <div class="content-11">
+        <h1>Оставьте заявку сейчас и получите<br>продающий дизайн-макет в подарок!</h1>
+
+        <div class="form3-wrap">
+          {% include 'include/ticket-form.html' %}
+        </div>
+    </div> <!-- end content-11 -->
+
+    <!-- content-12 -->
+    <div class="content-12">
+        <a href=""><img src="{{ STATIC_URL }}images/our-logo.png" alt=""></a>
+    </div> <!-- end content-12 -->
+</div><!-- end #wrapper -->
+{% if SITE_SETTING %}
+  {{ SITE_SETTINGS.bottom_js|safe }}
+{% endif %}
+</body>
+</html>
