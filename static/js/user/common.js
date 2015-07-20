@@ -13,7 +13,7 @@ $(function(){
     submitHandler: function() {
       $('.frm-wrp1 form').ajaxSubmit(function(data){
         if(data.success){
-          console.log(data.success);
+          $('.frm-wrp1 form').resetForm();
         } else {
           console.log(data.error);
         }
@@ -29,7 +29,7 @@ $(function(){
     submitHandler: function() {
       $('.form2-wrap form').ajaxSubmit(function(data){
         if(data.success){
-          console.log(data.success);
+          $('.form2-wrap form').resetForm();
         } else {
           console.log(data.error);
         }
@@ -45,7 +45,7 @@ $(function(){
     submitHandler: function() {
       $('.form3-wrap form').ajaxSubmit(function(data){
         if(data.success){
-          console.log(data.success);
+          $('.form3-wrap form').resetForm();
         } else {
           console.log(data.error);
         }

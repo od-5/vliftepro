@@ -24,7 +24,7 @@ SECRET_KEY = 'yr9_d+n@^-5#3=q5lus!tzp@25mn=u+%t6%4jwguhtlfaf$=an'
 
 YANDEX_MAPS_API_KEY = 'AO7kF1UBAAAA-akFCwIAR7_VYsSjwJ9g-dDEVHElLxuBQi8AAAAAAAAAAAAQMK4N7NYtvg4ALgMZ8-GRO_cQqQ=='
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
