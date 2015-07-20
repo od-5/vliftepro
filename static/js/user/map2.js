@@ -14,6 +14,23 @@ function init(){
                     center: coord,
                     zoom: 11
                 });
+                $.get("/map/",
+                    function(e) {
+                        //var data = JSON.parse(e); // получаем данные от сервера
+                        //console.log(e);
+                        function outputItem(item, i, e) {
+                            myMap.geoObjects.add(
+                                new ymaps.Placemark([item['coord_y'], item['coord_x']], {
+                                balloonContent: item['address'],
+                                hintContent: item['name']
+                                })
+                            );
+                        }
+                        e.forEach(outputItem);
+                    }
+                );
+
+
             },
             function (err) {
                 coord = [48.707103, 44.516939];
@@ -21,29 +38,30 @@ function init(){
                     center: coord,
                     zoom: 11
                 });
+                $.get("/map/",
+                    function(e) {
+                        //var data = JSON.parse(e); // получаем данные от сервера
+                        //console.log(e);
+                        function outputItem(item, i, e) {
+                            myMap.geoObjects.add(
+                                new ymaps.Placemark([item['coord_y'], item['coord_x']], {
+                                balloonContent: item['address'],
+                                hintContent: item['name']
+                                })
+                            );
+                        }
+                        e.forEach(outputItem);
+                    }
+                );
             }
         );
-    console.log(coord);
+    //console.log(coord);
     //myMap = new ymaps.Map("YMapsID", {
     //    center: coord,
     //    zoom: 11
     //});
     //console.log(ymaps.geocode('Волгоград', { results: 1 }));
-    $.get("/map/",
-        function(e) {
-            //var data = JSON.parse(e); // получаем данные от сервера
-            //console.log(e);
-            function outputItem(item, i, e) {
-                myMap.geoObjects.add(
-                    new ymaps.Placemark([item['coord_y'], item['coord_x']], {
-                    balloonContent: item['address'],
-                    hintContent: item['name']
-                    })
-                );
-            }
-            e.forEach(outputItem);
-        }
-    );
+
 
 
     $('.city-menu-wrap li.ch').click(function(){
