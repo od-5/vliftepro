@@ -5,11 +5,10 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
-urlpatterns = patterns('',
-    url(r'^', include('apps.page.urls')),
-    # url(r'^blog/', include('blog.urls')),
-
+urlpatterns = patterns(
+    '',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('apps.page.urls')),
 )
 
 if settings.DEBUG:

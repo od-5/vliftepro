@@ -1,6 +1,6 @@
 # coding=utf-8
 from django.contrib import admin
-from .models import City, Address, Format, Article, Slider
+from .models import City, Address, Format, Article, Slider, CitySlider
 
 __author__ = 'alexey'
 
@@ -34,8 +34,19 @@ class SliderAdmin(admin.ModelAdmin):
     preview.allow_tags = True
 
 
+class CitySliderAdmin(admin.ModelAdmin):
+    list_display = ('city', 'name', 'preview')
+    list_filter = ('city',)
+
+    def preview(self, img):
+        return "<img src='%s' style='width: 300px;' />" % img.image.url
+    preview.short_description = u"Превью"
+    preview.allow_tags = True
+
+
 admin.site.register(City, CityAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Format, FormatAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Slider, SliderAdmin)
+admin.site.register(CitySlider, CitySliderAdmin)

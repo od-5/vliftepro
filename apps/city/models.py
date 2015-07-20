@@ -89,3 +89,20 @@ class Slider(models.Model):
     image_resize = ImageSpecField(
         [SmartResize(*settings.CITY_SLIDER_SIZE)], source='image', format='JPEG', options={'quality': 94}
     )
+
+
+class CitySlider(models.Model):
+    class Meta:
+        verbose_name = u'Бизнес центр'
+        verbose_name_plural = u'Бизнес центры'
+
+    def __unicode__(self):
+        return self.name
+
+    city = models.ForeignKey(to=City, verbose_name=u'Город')
+    name = models.CharField(verbose_name=u'Название и адрес объекта', max_length=255)
+    type = models.CharField(verbose_name=u'Класс', max_length=255, blank=True, null=True)
+    lift = models.IntegerField(verbose_name=u'Количество лифтов', blank=True, null=True, default=1)
+    floor = models.IntegerField(verbose_name=u'Количество этажей', blank=True, null=True, default=1)
+    maneuverability = models.IntegerField(verbose_name=u'Примерная проходимость ежедневно', blank=True, null=True, default=1)
+    image = models.ImageField(verbose_name=u'Изображение', upload_to=get_slider_path)
