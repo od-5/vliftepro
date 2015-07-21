@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="{{ SITE_SETTINGS.meta_desc|default:'' }}">
-  <meta name="keywords" content="{{ SITE_SETTINGS.meta_key|default:'' }}">
+  <meta name="description" content="{% if city %}{{ city.meta_desc|default:'' }}{% else %}{{ SITE_SETTINGS.meta_desc|default:'' }}{% endif %}">
+  <meta name="keywords" content="{% if city %}{{ city.meta_key|default:'' }}{% else %}{{ SITE_SETTINGS.meta_key|default:'' }}{% endif %}">
   <title>{{ SITE_SETTINGS.title|default:'Дружба' }}{% if city %} | г.{{ city.name|default:'' }}{% endif %}</title>
   <script src="{{ STATIC_URL }}js/jquery-1.11.2.min.js"></script>
   <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>

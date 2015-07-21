@@ -15,5 +15,7 @@ SUIT_CONFIG = {
         {'label': u'Цены и форматы', 'icon': 'icon-cog', 'models': ('city.format',)},
         {'label': u'Акции', 'icon': 'icon-cog', 'models': ('city.article',)},
         {'label': u'Слайдер', 'icon': 'icon-cog', 'models': ('city.slider',)},
+        {'label': u'Заявки', 'icon':'icon-user', 'models': ('ticket.ticket',)},
+        {'label': u'Продажи', 'icon':'icon-user', 'models': ('ticket.sale',)},
     ),
 }

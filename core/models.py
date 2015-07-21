@@ -8,7 +8,7 @@ class Setup(models.Model):
     title = models.CharField(verbose_name=u'Заголовок <TITLE>...</TITLE>', max_length=256, blank=True)
     phone = models.CharField(verbose_name=u'Телефон', max_length=256, blank=True, null=True)
     email = models.EmailField(verbose_name=u'e-mail для приёма заявок', blank=True)
-    video = models.TextField(verbose_name=u'HTML-код видео', blank=True, null=True)
+    # video = models.TextField(verbose_name=u'HTML-код видео', blank=True, null=True)
     meta_key = models.TextField(verbose_name=u'Ключевые слова META_KEYWORDS', blank=True)
     meta_desc = models.TextField(verbose_name=u'Описание META_DESCRIPTION', blank=True)
     top_js = models.TextField(verbose_name=u'Скрипты в <HEAD>..</HEAD>', blank=True)

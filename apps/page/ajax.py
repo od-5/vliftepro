@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 
 from django.views.decorators.csrf import csrf_exempt
 from apps.city.models import Address, City, Format
+from apps.ticket.models import Ticket
 from .forms import TicketForm, CalculatorForm
 from apps.page.common import render_to_json
 from core.models import Setup
@@ -28,6 +29,9 @@ def ticket(request):
     if form.is_valid():
         name = form.cleaned_data['name']
         phone = form.cleaned_data['phone']
+        ticket = Ticket(name=name, phone=phone, text = u'')
+        ticket.save()
+
         send_mail(
             u'vlifte.pro - Заявка с сайта',
             u'Имя: %s\nТелефон: %s\n' % (name, phone),
@@ -88,11 +92,17 @@ def calculator(request):
             text_name = u'Заявка: \nИмя: %s\nТелефон: %s\n' % (cd_form['name'], cd_form['phone'])
             text_form = ''
             # print cd
+
+
             for i in cd:
                 # text_form = text_form + i['city'].name + ': ' + i['format'].name + '\n'
                 if i:
                     text_form = text_form + i['city'].name + ': ' + i['format'].name + '\n'
             text = text_name + text_form
+
+            ticket = Ticket(name=cd_form['name'], phone=cd_form['phone'], text = text)
+            ticket.save()
+
             send_mail(
                 u'vlifte.pro - Заказ рекламы с сайта',
                 text,

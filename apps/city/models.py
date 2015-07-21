@@ -16,6 +16,8 @@ class City(models.Model):
     name = models.CharField(max_length=100, verbose_name=u'Город')
     lift = models.DecimalField(max_digits=5, decimal_places=0, verbose_name=u'Кол-во лифтов')
     slug = models.SlugField(max_length=100, verbose_name=u'url', blank=True)
+    meta_key = models.TextField(verbose_name=u'Ключевые слова META_KEYWORDS', blank=True, null=True)
+    meta_desc = models.TextField(verbose_name=u'Описание META_DESCRIPTION', blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -33,8 +35,8 @@ class Address(models.Model):
     city = models.ForeignKey(City, verbose_name=u'Город')
     name = models.CharField(max_length=100, blank=True, verbose_name=u'Здание')
     address = models.CharField(max_length=100, verbose_name=u'Адрес')
-    coord_x = models.DecimalField(max_digits=8, decimal_places=6, blank=True, null=True, editable=True, verbose_name=u'Ширина')
-    coord_y = models.DecimalField(max_digits=8, decimal_places=6, blank=True, null=True, editable=True, verbose_name=u'Долгота')
+    coord_x = models.DecimalField(max_digits=8, decimal_places=6, blank=True, null=True, editable=False, verbose_name=u'Ширина')
+    coord_y = models.DecimalField(max_digits=8, decimal_places=6, blank=True, null=True, editable=False, verbose_name=u'Долгота')
 
     def __unicode__(self):
         return u'%s %s' % (self.city, self.address)

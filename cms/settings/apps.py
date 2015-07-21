@@ -11,4 +11,5 @@ INSTALLED_APPS = (
     'core',
     'apps.page',
     'apps.city',
+    'apps.ticket',
 )
