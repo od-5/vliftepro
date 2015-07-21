@@ -856,6 +856,9 @@ body {
     font-weight: bold;
     padding-right: 10px;
 }
+.city-slider-holder .bx-wrapper .bx-controls-direction a {
+    top: 25%;
+}
 /*conect-8*/
 
 .content-8{
