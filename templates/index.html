@@ -358,23 +358,23 @@ $(function(){
                     </tr>
                     <tr>
                       <td class="title">Класс</td>
-                      <td>{{ slide.type }}</td>
+                      <td>{{ slide.type|default:'' }}</td>
                     </tr>
                     <tr>
                       <td class="title">Название и адрес объекта</td>
-                      <td>{{ slide.name }}</td>
+                      <td>{{ slide.name|default:'' }}</td>
                     </tr>
                     <tr>
                       <td class="title">Кол-во лифтов</td>
-                      <td>{{ slide.lift }}</td>
+                      <td>{{ slide.lift|default:'' }}</td>
                     </tr>
                     <tr>
                       <td class="title">Кол-во этажей</td>
-                      <td>{{ slide.floor }}</td>
+                      <td>{{ slide.floor|default:'' }}</td>
                     </tr>
                     <tr>
                       <td class="title">Примерная проходимость ежедневно</td>
-                      <td>{{ slide.maneuverability }}</td>
+                      <td>{{ slide.maneuverability|default:'' }}</td>
                     </tr>
                   </table>
                 </div>
