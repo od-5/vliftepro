@@ -21,7 +21,14 @@
   {% endif %}
 <script>
 $(function(){
-
+  $('.content-10 tr.lines').formset({
+        prefix: '{{ calc_formset.prefix }}',
+        addText: 'Добавить город',
+        deleteText: 'Удалить'
+    });
+    $('a.add-row').click(function(){
+        $('a.delete-row').show();
+    });
 
 });
 </script>
