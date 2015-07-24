@@ -58,14 +58,14 @@ $(function(){
     $(".content-10 form input.nm, .content-10 form input.tele").addClass("required");
     $(".content-10 form").validate();
     // запускаем formset
-    $('.content-10 tr.lines').formset({
-        prefix: '{{ calc_formset.prefix }}',
-        addText: 'Добавить город',
-        deleteText: 'Удалить'
-    });
-    $('a.add-row').click(function(){
-        $('a.delete-row').show();
-    });
+    //$('.content-10 tr.lines').formset({
+    //    prefix: '{{ calc_formset.prefix }}',
+    //    addText: 'Добавить город',
+    //    deleteText: 'Удалить'
+    //});
+    //$('a.add-row').click(function(){
+    //    $('a.delete-row').show();
+    //});
     $('.col-2 input, .col-4 input, .col-5 input, .tbl-sum input[type=text]').attr('readonly', true);
 
     var id;
