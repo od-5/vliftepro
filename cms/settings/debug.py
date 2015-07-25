@@ -3,7 +3,7 @@ from .apps import INSTALLED_APPS
 
 __author__ = 'alexy'
 
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 
