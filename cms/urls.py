@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^', include('apps.page.urls')),
 )
 

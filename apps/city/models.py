@@ -1,4 +1,5 @@
 # coding=utf-8
+from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.db import models
 from imagekit.models import ImageSpecField
@@ -67,7 +68,7 @@ class Format(models.Model):
 
 class Article(models.Model):
     city = models.ForeignKey(to=City, verbose_name=u'Город')
-    text = models.TextField(verbose_name=u'Текст')
+    text = RichTextField(verbose_name=u'Текст')
 
     def __unicode__(self):
         return self.city.name

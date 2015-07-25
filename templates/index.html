@@ -72,7 +72,7 @@ $(function(){
         <div class="line1-2-city">
           {% if city %}
             {% for article in city.article_set.all %}
-              <p>{{ article.text|truncatewords:100|linebreaksbr }}</p>
+              <p>{{ article.text|truncatewords|safe }}</p>
             {% endfor %}
           {% endif %}
         </div>
