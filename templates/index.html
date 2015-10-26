@@ -135,88 +135,6 @@ $(function(){
 
         <div class="slide-holder-1">
             <ul class="bxslider slider-1">
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb1.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>БЦ "Меркурий"</p>#}
-{#                            <h2>г. Волгоград</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb2.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>БЦ "Технополис"</p>#}
-{#                            <h2>г. Казань</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb3.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>Универсальный бизнес-центр</p>#}
-{#                            <h2>г. Саратов</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb4.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>ТРЦ "Зелёное кольцо"</p>#}
-{#                            <h2>г. Волгоград</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb5.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>ТРЦ "Диамант" на Комсомольской</p>#}
-{#                            <h2>г. Волгоград</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb6.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>ТРК "ЕВРОПА СИТИ МОЛЛ"</p>#}
-{#                            <h2>г. Волгоград</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb7.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>Офисный центр ул. Балонина, 2А</p>#}
-{#                            <h2>г. Волгоград</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb8.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>Офисный центр пр. Ленина, 94 А</p>#}
-{#                            <h2>г. Волгоград</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <div class="img-wrap">#}
-{#                        <img src="{{ STATIC_URL }}images/slider/thumb9.jpg" alt="">#}
-{#                        <div class="sld-info">#}
-{#                            <p>БЦ «Колизей»</p>#}
-{#                            <h2>г. Ростов-на-Дону</h2>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-
               {% for slide in slider_list %}
                 <li>
                     <div class="img-wrap">
@@ -332,20 +250,11 @@ $(function(){
       {% if index %}
         <div class="city-menu-wrap">
             <ul>
-                {% if first_city %}
-                {% for item in first_city %}
+              {% if all_city %}
+                {% for item in all_city %}
                 <li class="ch">{{ item.name }}</li>
                 {% endfor %}
-                {% endif %}
-                {% if all_city %}
-                <li>все города
-                    <ul>
-                        {% for item in all_city %}
-                        <li class="ch">{{ item.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                {% endif %}
+              {% endif %}
             </ul>
         </div>
       {%  endif %}

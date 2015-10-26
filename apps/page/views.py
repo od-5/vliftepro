@@ -14,8 +14,7 @@ def home_view(request):
         'form': form,
         'slider_list': slider,
         'calc_formset': CalcFormSet,
-        'first_city': city_list[:4],
-        'all_city': city_list[4:],
+        'all_city': city_list,
         'index': True
     })
 
