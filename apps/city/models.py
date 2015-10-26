@@ -17,6 +17,7 @@ class City(models.Model):
     name = models.CharField(max_length=100, verbose_name=u'Город')
     lift = models.DecimalField(max_digits=5, decimal_places=0, verbose_name=u'Кол-во лифтов')
     slug = models.SlugField(max_length=100, verbose_name=u'url', blank=True)
+    order = models.PositiveSmallIntegerField(default=1, verbose_name=u'Сортировка')
     meta_key = models.TextField(verbose_name=u'Ключевые слова META_KEYWORDS', blank=True, null=True)
     meta_desc = models.TextField(verbose_name=u'Описание META_DESCRIPTION', blank=True, null=True)
 

@@ -7,7 +7,7 @@ __author__ = 'alexy'
 
 def home_view(request):
     form = TicketForm()
-    city_list = City.objects.all()
+    city_list = City.objects.all().order_by('order')
     CalcFormSet = formset_factory(CalculatorForm, extra=3)
     slider = Slider.objects.all()
     return render(request, 'index.html', {

@@ -1,13 +1,15 @@
 # coding=utf-8
 from django.contrib import admin
 from .models import City, Address, Format, Article, Slider, CitySlider
+from suit.admin import SortableModelAdmin
 
 __author__ = 'alexey'
 
 
-class CityAdmin(admin.ModelAdmin):
+class CityAdmin(SortableModelAdmin):
     list_display = ('name', 'lift')
     readonly_fields = ['slug',]
+    sortable = 'order'
 
 
 class AddressAdmin(admin.ModelAdmin):
