@@ -865,7 +865,6 @@ body {
     background: #ff9b00;
     position: relative;
     text-align: center;
-    padding-top: 130px;
     padding-bottom: 10px;
 }
 
@@ -883,6 +882,7 @@ body {
   color: #fff;
   text-align: center;
   margin: 0 auto;
+  width: 780px;
   padding: 20px 0;
   /*float: left;*/
   /*left: 249px;*/
@@ -921,8 +921,7 @@ body {
   margin:0;
   padding:0;
   list-style-type:none;
-  width: 780px;
-  }
+}
 
 
 .city-menu-wrap li{
