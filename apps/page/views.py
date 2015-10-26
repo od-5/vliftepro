@@ -24,13 +24,12 @@ def city_view(request, slug):
     city = City.objects.get(slug=slug)
     slider = city.slider_set.all()
     city_slider = city.cityslider_set.all()
-    city_list = City.objects.all()
+    city_list = City.objects.all().order_by('order')
     return render(request, 'index.html', {
         'slug': slug,
         'city': city,
         'slider_list': slider,
         'city_slider_list': city_slider,
         'form': form,
-        'first_city': city_list[:4],
-        'all_city': city_list[4:],
+        'all_city': city_list,
     })
